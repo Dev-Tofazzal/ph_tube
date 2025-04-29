@@ -7,7 +7,7 @@ function getTimeString(time){
      remainingSecond = time % 3600;
      const minute = parseInt(remainingSecond / 60 ) ;
      remainingSecond = remainingSecond % 60 ;
-    return `${day} day ${hour} hour ${minute} minites ${remainingSecond} second ago`
+     return `${day} day ${hour} hour ${minute} minites ${remainingSecond} second ago`
 }
 
 console.log(getTimeString(7865));

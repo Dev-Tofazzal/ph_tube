@@ -5,7 +5,7 @@ function getTimeString(time){
     remainingSecond = time % 3600;
     const minute = parseInt(remainingSecond / 60 ) ;
     remainingSecond = remainingSecond % 60 ;
-   return `${day} days ${hour} hour ${minute} minites ${remainingSecond} second ago`
+    return `${day} days ${hour} hour ${minute} minites ${remainingSecond} second ago`
 }
 
 const loadCategories= () => {
@@ -18,20 +18,30 @@ const loadCategories= () => {
 
 const loadVideos= () => {
     fetch("https://openapi.programming-hero.com/api/phero-tube/videos")
-    .then(res => res.json())
-    .then(data => displayVideos(data.videos))
-    .catch(err => console.log(err))
+        .then(res => res.json())
+        .then(data => displayVideos(data.videos))
+        .catch(err => console.log(err))
     
+}
+
+const loadCategoryVideos = (id) =>{
+    fetch(`https://openapi.programming-hero.com/api/phero-tube/category/${id}`)
+        .then(res => res.json())
+        .then(data => displayVideos(data.category))
+        .catch(err => console.log(err))
 }
 
 
 const displayCategories = (categories) => {
     const categoryContainer = document.getElementById("categories")
     categories.forEach( (item) => {
-        const button = document.createElement("button");
-        button.classList = "btn";
-        button.innerText = item.category;
-        categoryContainer.append(button)
+        const buttonContainer = document.createElement("div");
+        buttonContainer.innerHTML = `
+         <button onclick="loadCategoryVideos(${item.category_id})"  Class="btn">
+         ${item.category}
+         </button>
+        `
+        categoryContainer.append(buttonContainer)
     })
     
 }
@@ -56,7 +66,8 @@ const displayCategories = (categories) => {
 // }
 
 const displayVideos = (videos) => {
-    const videoContainer = document.getElementById("videos")
+    const videoContainer = document.getElementById("videos");
+    videoContainer.innerHTML = ""
     videos.forEach( video => {
         console.log(video);
         const card = document.createElement("div");
@@ -65,7 +76,7 @@ const displayVideos = (videos) => {
         <figure class="h-[200px] relative">
              <img class="h-full w-full object-cover" src= ${video.thumbnail}
               />
-              ${video.others.posted_date?.length === 0 ? '' : `<span class="absolute right-2 bottom-2 bg-black text-white rounded-lg p-1">
+              ${video.others.posted_date?.length === 0 ? '' : `<span class="absolute text-sm right-2 bottom-2 bg-black text-white rounded-lg p-1">
                 ${getTimeString(video.others.posted_date)}</span>`}
              
         </figure>
